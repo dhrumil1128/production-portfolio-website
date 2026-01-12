@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Frontend Portfolio</title>
+    <!-- Importing Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- style.css Content --- */
+
+        /* 1. CSS Variables & Base Setup */
+        :root {
+            /* Light Mode Defaults */
+            --color-bg: #f4f7f9;
+            --color-surface: #ffffff;
+            --text-color: #1a202c;
+            --primary-color: #3b82f6;
+            --border-color: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(200, 200, 200, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            /* Dark Mode Overrides */
+            --color-bg: #121212;
+            --color-surface: #1e1e1e;
+            --text-color: #e2e8f0;
+            --primary-color: #60a5fa;
+            --border-color: #2d3748;
+            --glass-bg: rgba(30, 30, 30, 0.7);
+            --glass-border: rgba(50, 50, 50, 0.5);
+            --shadow-color: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            /* Base Grid Layout for Responsiveness */
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-areas: 
+                "header"
+                "hero"
+                "about"
+                "skills"
+                "projects"
+                "contact"
+                "footer";
+        }
+
+        /* --- 6. Loading State Behavior (Preloader) --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--primary-color);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* General Styling */
+        section {
+            padding: 40px 20px;
+            grid-area: auto; /* Default for flow */
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            grid-area: header;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--color-bg);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(var(--primary-color), 0.1);
+        }
+
+        /* Icons placeholder (using text for simplicity) */
+        .theme-toggle span {
+            font-size: 1.2rem;
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            grid-area: hero;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #3168c8;
+            transform: translateY(-2px);
+        }
+
+        /* --- About & Skills --- */
+        #about {
+            grid-area: about;
+            padding: 60px 20px;
+            background-color: var(--color-surface);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #skills {
+            grid-area: skills;
+            padding: 60px 20px;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .skill-tag:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- Projects Section (Glassmorphism) --- */
+        #projects {
+            grid-area: projects;
+            padding: 60px 20px;
+            background-color: var(--color-surface);
+        }
+
+        .project-grid {
+            display: grid;
+            gap: 30px;
+            grid-template-columns: 1fr; /* Mobile: Single column */
+        }
+
+        .project-card {
+            /* Glassmorphism Implementation */
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px var(--shadow-color), 0 0 15px var(--primary-color);
+        }
+
+        .project-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .project-card p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .project-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 15px;
+            transition: color 0.2s;
+        }
+        .project-links a:hover {
+            color: var(--text-color);
+        }
+
+        /* --- Contact Section --- */
+        #contact {
+            grid-area: contact;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        #contact form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #contact input, #contact textarea {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--color-surface);
+            color: var(--text-color);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #contact input:focus, #contact textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(63, 130, 246, 0.3);
+        }
+        
+        /* --- Footer --- */
+        footer {
+            grid-area: footer;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            margin: 0 10px;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+
+        /* --- 8. Responsiveness (Media Queries) --- */
+        @media (min-width: 768px) {
+            body {
+                /* Adjusting Grid for larger screens */
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "header header"
+                    "hero hero"
+                    "about about"
+                    "skills skills"
+                    "projects projects"
+                    "contact contact"
+                    "footer footer";
+            }
+
+            header {
+                padding: 15px 40px;
+            }
+
+            .hero-content h1 {
+                font-size: 4.5rem;
+            }
+
+            .project-grid {
+                grid-template-columns: repeat(2, 1fr); /* Two columns on tablet/desktop */
+            }
+            
+            #contact form {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            #contact form > * {
+                flex-grow: 1;
+            }
+            
+            #contact .submit-btn {
+                flex-basis: 100%;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .project-grid {
+                grid-template-columns: repeat(3, 1fr); /* Three columns on large screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 6. CSS-Only Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 3. Component Structure -->
+    <header>
+        <a href="#" class="logo">DevName</a>
+        <nav class="nav-links">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <!-- Theme Toggle Switch -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark/Light Mode">
+            <span id="theme-icon">🌙</span> <!-- Placeholder Icon -->
+        </button>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Hi, I'm A Senior Frontend Developer.</h1>
+                <p>Building high-performance, accessible, and beautiful user interfaces using React, Next.js, and modern CSS techniques like Glassmorphism.</p>
+                <a href="#projects" class="cta-button">View My Work</a>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>About Me</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 30px;">
+                    With 8+ years of experience specializing in the React ecosystem, I focus on translating complex designs into clean, maintainable, and scalable frontend architecture. My expertise lies in performance optimization, state management, and crafting immersive user experiences using cutting-edge CSS features.
+                </p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <h2>Core Technologies</h2>
+                <div class="skill-list">
+                    <span class="skill-tag">React / Next.js</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">Tailwind CSS</span>
+                    <span class="skill-tag">Vanilla JS/HTML/CSS</span>
+                    <span class="skill-tag">CSS Grid/Flexbox</span>
+                    <span class="skill-tag">Performance Optimization</span>
+                    <span class="skill-tag">State Management (Zustand/Redux)</span>
+                    <span class="skill-tag">Accessibility (A11y)</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <h2>Featured Projects</h2>
+                <div class="project-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card">
+                        <h3>Enterprise Dashboard UI</h3>
+                        <p>A complex analytics platform built with Next.js and heavily optimized rendering paths. Features custom charting libraries.</p>
+                        <div class="project-links">
+                            <a href="#">Live Demo</a>
+                            <a href="#">Source Code</a>
+                        </div>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="project-card">
+                        <h3>Glassmorphic E-commerce Site</h3>
+                        <p>Showcasing advanced CSS techniques, utilizing backdrop-filter for a modern, layered aesthetic on a high-traffic frontend.</p>
+                        <div class="project-links">
+                            <a href="#">Live Demo</a>
+                            <a href="#">Source Code</a>
+                        </div>
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="project-card">
+                        <h3>Vanilla JS Component Library</h3>
+                        <p>A set of reusable, framework-agnostic UI components built purely with ES6+ and custom CSS properties for easy theming.</p>
+                        <div class="project-links">
+                            <a href="#">Live Demo</a>
+                            <a href="#">Source Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Get In Touch</h2>
+                <form id="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="cta-button submit-btn" style="flex-basis: 100%;">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <a href="#" aria-label="LinkedIn">LN</a>
+            <a href="#" aria-label="GitHub">GH</a>
+            <a href="#" aria-label="Twitter">TW</a>
+        </div>
+        <p>&copy; <span id="current-year"></span> Senior Frontend Portfolio. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- script.js Content --- 
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const preloader = document.getElementById('preloader');
+            const currentYearSpan = document.getElementById('current-year');
+
+            // --- 7. Error Handling & Theme Logic --- 
+            const loadTheme = () => {
+                try {
+                    const savedTheme = localStorage.getItem('theme');
+                    if (savedTheme === 'dark') {
+                        body.classList.add('dark-mode');
+                        themeIcon.textContent = '☀️';
+                    } else {
+                        body.classList.remove('dark-mode');
+                        themeIcon.textContent = '🌙';
+                    }
+                } catch (error) {
+                    console.error("Error loading theme preference:", error);
+                    // Fallback: Ensure light mode if error occurs
+                    body.classList.remove('dark-mode');
+                    themeIcon.textContent = '🌙';
+                }
+            };
+
+            const toggleTheme = () => {
+                try {
+                    const isDark = body.classList.toggle('dark-mode');
+                    if (isDark) {
+                        localStorage.setItem('theme', 'dark');
+                        themeIcon.textContent = '☀️';
+                    } else {
+                        localStorage.setItem('theme', 'light');
+                        themeIcon.textContent = '🌙';
+                    }
+                } catch (error) {
+                    console.error("Error toggling theme:", error);
+                }
+            };
+
+            // Initialize Theme
+            loadTheme();
+
+            // Event Listener for Theme Toggle
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // --- 6. Preloader Hiding Mechanism --- 
+            // Add fade-out class immediately after DOMContentLoaded
+            preloader.classList.add('fade-out');
+            
+            // Remove element from DOM after transition completes (500ms defined in CSS)
+            preloader.addEventListener('transitionend', () => {
+                if (preloader.classList.contains('fade-out')) {
+                    preloader.style.display = 'none';
+                }
+            });
+            
+            // Set current year in footer
+            currentYearSpan.textContent = new Date().getFullYear();
+
+            // Simple form submission prevention (since no backend exists)
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert("Message sent! (This is a static frontend demo, submission ignored.)");
+                contactForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
