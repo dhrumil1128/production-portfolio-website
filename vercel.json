@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "portfolio-website",
+  "public": true,
+  "files": [
+    "index.html"
+  ]
+}
